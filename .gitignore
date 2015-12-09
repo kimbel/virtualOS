@@ -1,5 +1,5 @@
 
-bin/
+bin/**/*.class
 .classpath
 .idea/
 .settings
