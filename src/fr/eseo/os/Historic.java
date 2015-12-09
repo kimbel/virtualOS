@@ -20,14 +20,6 @@ public class Historic {
         return user;
     }
 
-    public String getLastCommand() {
-        if (commands.size() > 0) {
-            return commands.get(commands.size() - 1);
-        } else {
-            return "";
-        }
-    }
-
     public void setUser(User user) {
         this.user = user;
     }

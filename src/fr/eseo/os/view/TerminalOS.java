@@ -1,9 +1,6 @@
 package fr.eseo.os.view;
 
 import fr.eseo.os.*;
-import fr.eseo.os.view.LogFrame;
-
-import java.time.Clock;
 import java.util.*;
 
 /**
@@ -25,27 +22,20 @@ public class TerminalOS extends Terminal implements Observer {
 		this.user = User.getInstance(login, password);
 		this.user.addObserver(this);
 
-		this.setTitle(user.hashCode()+"@"+user.getLogin());
+		this.setTitle(user.hashCode() + "@" + user.getLogin());
 		this.setUserPrompt(user.getLogin());
 
-		this.copyCommands();
-
-		this.getCommandTA().append(user.getLogin()+PROMPT);
-
+		this.update(null, null);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		this.getCommandTA().append(this.user.getLastHistoric() + '\n');
-		this.getCommandTA().append("commande introuvable" + '\n');
-		this.getCommandTA().append(user.getLogin() + PROMPT);
-	}
-
-	public void copyCommands() {
+		this.getCommandTA().setText("");
 		for (String command : this.user.getHistoric().getCommands()) {
 			this.getCommandTA().append(user.getLogin() + PROMPT + command + '\n');
 			this.getCommandTA().append("commande introuvable" + '\n');
 		}
+		this.getCommandTA().append(user.getLogin() + PROMPT);
 	}
 
 	@Override

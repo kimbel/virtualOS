@@ -1,9 +1,8 @@
 package fr.eseo.os;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.Map;
 
 public class User extends Observable {
 
@@ -11,7 +10,8 @@ public class User extends Observable {
     private String password;
     private Folder homeDir;
     private Historic historic;
-    private static Set<User> instances = new HashSet<>();
+//    private static Set<User> instances = new HashSet<>();
+    private static Map<String, User> instances = new HashMap<>();
 
     /**
      * Creates a new User with a default home directory
@@ -27,31 +27,22 @@ public class User extends Observable {
     }
 
     public synchronized  static User getInstance(String login, String password) {
-        User user = null;
 
-        for (User u : instances) {
-            if (u.getLogin().equals(login)) {
-                user = u;
+        for (Map.Entry<String, User> entries : instances.entrySet()) {
+            if (entries.getKey().equals(login)) {
+                return entries.getValue();
             }
         }
 
-        if (user != null) {
-            return user;
-        } else {
-            user = new User(login, password);
-            instances.add(user);
-            return user;
-        }
+        User user = new User(login, password);
+        instances.put(login, user);
+        return user;
     }
 
     public void addCommand(String command) {
         this.getHistoric().getCommands().add(command);
         this.setChanged();
         this.notifyObservers();
-    }
-
-    public String getLastHistoric() {
-        return this.historic.getLastCommand();
     }
 
     /**
