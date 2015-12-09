@@ -1,0 +1,159 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	 Index, Glossaires et Nomenclature	  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{makeidx}
+	%\makeindex
+%\usepackage[toc]{glossaries} %[nonumberlist,xindy]
+	%\makeglossaries
+%\usepackage[french,intoc]{nomencl}
+	%\makenomenclature
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		  		  Langue     			  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel} % Langue française
+\usepackage{lmodern} %[bookman, charter, newcent, mathpazo, mathptmx, lmodern]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	     Gestion couleurs LaTeX  	 	  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{color} %Couleur dans latex
+\usepackage[svgnames]{xcolor} %Plus de couleurs
+	%\definecolor{nomCouleur}{rgb}{0,0,0}
+%\usepackage{colorbl} %Colorer du texte dans un tableau
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	  		Gestion des liens 	 		  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{url} %affichage d'url
+\usepackage{hyperref} % hyperlien + toc
+	\hypersetup{pdfborder={0 0 0}} %Supprime le cadre
+	%%\href{url}{textLien} %no style url
+	%%\nolinkurl{url} %style url
+	%%\href{mailto:truc@bidon.org}{truc@bidon.org}
+	%%\href{run:/cheminvers/fichier.pdf}{voir ce pdf}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	  	 Gestion des filigranes 	 	  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{draftwatermark} % [firstpage]
+	%\SetWatermarkLightness{0.7}
+	%\SetWatermarkColor{red} 
+	%\SetWatermarkColor[rgb]{0,0,1}
+	%\SetWatermarkAngle{25}
+	%\SetWatermarkScale{2}
+	%\SetWatermarkFontSize{2cm}
+	%\SetWatermarkText{Texte en filigrane}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	     Gestion des marges LaTeX	 	  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{geometry} %Modification grossière des marges
+%\usepackage{fullpage}
+\usepackage{layout} %Permet d'afficher toute les marges "\layout"
+%  1 inch= 72pt = 2.54cm
+
+%\oddsidemargin = 27pt %pair
+%\evensidemargin = 8pt %impair
+%\textwidth = 418pt
+%\marginparwidth = 0pt
+%\topmargin = 50pt
+\headheight = 15pt
+%\textheight = 640pt
+%\headsep = 10pt
+
+%Hauteur disponible : 21,8 cm
+%Largeur disponible : 16,2 cm
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	   Gestion des figures 				 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{wrapfig} %Figure incluse dans un texte
+%\usepackage{subcaption}  %Sous-figure (subfig et subfigure déprécié)
+%\usepackage{caption}  %Requis par subcaption
+\usepackage{placeins} %Enpêche les figures de dépasser la barrier donnée
+\usepackage{graphicx} %Introduction de document exterieur (png, jpg)
+\usepackage{epstopdf} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  		 Mathématiques sous LaTeX		  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{amsmath} %Package formule mathématiques
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+%\usepackage{amsthm} %théorème
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  		 Physiques sous LaTeX		      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{amsmath} %Package formule mathématiques
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+%\usepackage{schemabloc}
+
+%http://fr.wikibooks.org/wiki/LaTeX/%C3%89crire_de_la_physique
+%http://fr.wikibooks.org/wiki/LaTeX/%C3%89crire_des_formules_chimiques
+%http://sciences-indus-cpge.papanicola.info/Schema-blocs-avec-PGF-TIKZ-sous 
+	%PGF/TIKZ : schéma-bloc
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	    Informatiques sous LaTeX  	      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+
+%\usepackage{texments} %couleur du code ?
+%\usepackage{moreverb} %numero de ligne ?
+%\usepackage{verbatim}
+%\usepackage{listings} %no with utf8 %%\lstset
+%\usepackage{minted}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	  		Autres packages  	 		  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[final]{pdfpages} %Insère PDF 
+	%%\includepdf[pages=1-10]{nom.pdf}
+%\usepackage[toc,page]{appendix} %Annexe
+	%%\appendix ou \begin{appendices}
+%\usepackage{lettrine}	
+	%%\lettrine{L}{suite}
+%\usepackage{eurosym} %Symbole euro 
+	%%\euro
+%\usepackage{setspace} %Interligne
+%\usepackage{soul} %Souligne/barre du texte
+%\usepackage[tight]{shorttoc} % ou minitoc
+	%%\shorttoc{titre}{niveau}
+%\usepackage{multicol}
+	%%\begin{multicols}{nb}
+%\usepackage{minipage}
+%\usepackage{enumitem}
+	%%\begin{description}[font=\normalfont]
+%\usepackage{lipsum}
+	%%\lipsum[1-7] ou \lipsum ou \lipsum[5]
+	%%\setlipsumdefault{n°1-n°2}
+\usepackage{tikz-uml}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Gestion de la présentation LaTex	  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[tikz]{bclogo} %Package de note dans les pages (avec logo)
+%\usepackage{framed} %Package pour les notes classiques
+\usepackage{sectsty} %Changement de l'affichage des sections latex
+\usepackage{fancyhdr} %Entete et pied de page
+\usepackage{lastpage} %Sort la dernière page du document "LastPage"
+
+
+	\sectionfont{\color{RoyalBlue}{}} % Couleur des sections
+	\subsectionfont{\color{DodgerBlue}{}} %Couleur des subsections
+
+%Site pour d'autres couleur : http://en.wikibooks.org/wiki/LaTeX/Colors

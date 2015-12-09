@@ -1,0 +1,28 @@
+
+\newpage
+\section{Design Pattern - Singleton}
+
+	\subsection{Objectifs}
+
+	Les objectifs de l'incrément 1 sont les suivants :\\
+
+	\begin{itemize}
+	\item Créer un nouvel utilisateur à chaque validation;
+	\item Avoir un utilisateur unique par login;
+	\item Créer plusieurs terminaux par utilisateur;
+	\item Interdir la création d'utilisateur hors de la fenêtre.\\
+	\end{itemize}
+
+	Pour répondre à ces objectifs nous allons utiliser le design pattern Singleton. En effet, le Singleton garantie l'unicité de l'intanciation de la classe User.
+
+	\subsection{Implémentation}
+
+Dans le but d'implémenter notre solution, nous avons crée dans la classe User la méthode getInstance() :
+public synchronized  static User getInstance(String login, String password). Cette méthode est static, ce qui permet d'avoir une instance unique de cette classe. Cette méthode est publique, ce qui donne un point d'accès universelle à une instance donnée.\\
+Le mot clé synchronized permet de gérer les problématiques d'accès concurrent dans le cas de programmation multitâche. On s'assure ainsi en effet que la ressource ne sera pas partagé à un instant du programme par plusieurs tâche.\\
+
+La méthode getInstance() permet à partir d'un login et d'un mot de passe passé en paramètre de retourner : \\
+\begin{itemize}
+\item L'instance existante de user si le login est déjà connu;
+\item Retourne une nouvelle instance de la classe user après avoir ajouté le login dans une liste d'instance (servant de mémoire).
+\end{itemize}

@@ -1,0 +1,86 @@
+
+\documentclass[utf8, 14pt]{beamer}
+
+\include{Configuration}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Design Patterns]{Design Patterns}
+\subtitle{OS Virtuel}
+
+\author[Axel G. | Audoin De C.]{Axel \textsc{Gendillard} \and Audoin \textsc{De Chantérac}}
+\institute[]
+{
+	Étudiant ingénieur\\ 
+	Groupe ESEO \\
+	%\medskip
+	%\textit{axel.gendillard@reseau.eseo.fr}
+}
+
+\date{\today} 
+
+%\logo{\includegraphics[scale=0.3]{logo}}
+
+\titlegraphic{%
+%\includegraphics[scale=0.55]{logo} \hspace{1cm}~%
+%\includegraphics[scale=0.6]{eseo}
+}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Sommaire}
+\tableofcontents
+\end{frame} 
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+\section{Incrément 1 : Singleton}
+	
+	\begin{frame}{Incrément 1 : Singleton}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item Créer un nouvel utilisateur à chaque validation;
+		\item Avoir un utilisateur unique par login;
+		\item Créer plusieurs terminaux par utilisateur;
+		\item Interdir la création d'utilisateur hors de la fenêtre.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Singleton}
+		\begin{itemize}
+		\item Garantir l'unicité de l'instance d'une classe;
+		\item Accéder globalement à l'instance.
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 1 : Singleton - UML}
+		\begin{center}
+		\begin{tikzpicture}
+		\begin{umlpackage}{os}
+		\umlclass{User}
+		{
+		\umlstatic{-- instances : Map<String, User>}
+		}{
+		-- User (login : String, password : String)\\
+		\umlstatic{+ getInstance (login : String, password : String) : User}
+		}
+		\end{umlpackage}
+		\end{tikzpicture}
+		\end{center}		
+	\end{frame}
+
+% ------------------------------------------------------------------------ %
+
+
+
+\end{document} 

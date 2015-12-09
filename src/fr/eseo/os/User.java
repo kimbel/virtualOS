@@ -10,7 +10,6 @@ public class User extends Observable {
     private String password;
     private Folder homeDir;
     private Historic historic;
-//    private static Set<User> instances = new HashSet<>();
     private static Map<String, User> instances = new HashMap<>();
 
     /**

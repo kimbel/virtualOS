@@ -1,0 +1,31 @@
+
+\newpage
+\section{Design Pattern - Observer}
+
+\subsection{Objectifs}
+
+Les objectifs de l'incrément 2 sont les suivants :\\
+
+\begin{itemize}
+\item Synchroniser les historiques des terminaux;
+\item Mettre à jour tous les terminaux lors de l'entrée d'une commande.\\
+\end{itemize}
+
+L'API Java nous fournit déjà l'interface Observer et la classe Observable.
+
+\subsection{Implémentation}
+
+Pour commencer, nous avons actualisé les notions d'observer et d'observables.
+Les instances "observers" sont les instances de la classe VirtualOS. Nous avons implémenté l'interface java.util.Observer dans la classe VirtualOS.\\
+
+Les instances "observables" sont les instances de la classe User. Nous avons étendu la classe java.util.Observable dans la classe User. Cette classe est liée à un historique (classe Historic). La classe Historic a une liste de commandes et est liée à un utilisateur (classe User).\\
+
+Afin de gérer la synchronisation des historiques lors de l'ouverture d'un nouveau terminal, nous avons créé une méthode : copyCommand(). Cette méthode parcours la liste des commandes du terminal courant et reproduit les entrées et sorties de l'utilisateur dans le nouveau terminal. Cette méthode est appelé dans le constructeur de TerminalOS.\\
+
+Afin de gérer la synchronisation dynamique des terminaux, nous avons utilisé l'interface Observer et la classe Observable.\\
+
+L'interface Observer n'a qu'une seule méthode : void update(Observable o). Dans virtualOS, on a "override" cette méthode en ajoutant les chaînes de caractères que nous voulons mettre à jour. On récupère seulement la dernière commande de l'historique : getLastHistoric().\\
+
+L'appel de la méthode handleCommand, on effectue la mise à jour des terminaux par l'appel de addCommand. Afin d'éviter une mise à jour du terminal courant, on supprime ce terminal dans la liste des observers (deleteObserver). On le réajoute après la synchronisation (addObserver).\\
+
+La classe User a une méthode permettant l'ajout d'une commande dans la liste et la synchronisation des terminaux : addCommand(String command). Cette méthode utilise les méthodes de la classe Observable pour la synchronisation : setChanged() (permet la modifiction des terminaux via un booléen contenu dans la classe Observable : changed) et notifyObservers() (appelle la méthode update de l'interface Observer afin de mettre à jour les terminaux).
