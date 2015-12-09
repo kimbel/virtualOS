@@ -1,9 +1,12 @@
 package fr.eseo.os;
 
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
-public class User {
+public class User extends Observable {
+
     private String login;
     private String password;
     private Folder homeDir;
@@ -39,6 +42,16 @@ public class User {
             instances.add(user);
             return user;
         }
+    }
+
+    public void addCommand(String command) {
+        this.getHistoric().getCommands().add(command);
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public String getLastHistoric() {
+        return this.historic.getLastCommand();
     }
 
     /**

@@ -1,18 +1,18 @@
 package fr.eseo.os;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by axel on 07/12/15.
  */
 public class Historic {
 
-    private Map<String, String> commands;
+    private List<String> commands;
     private User user;
 
     public Historic(User user) {
-        commands = new HashMap<>();
+        this.commands = new ArrayList<>();
         this.user = user;
     }
 
@@ -20,15 +20,24 @@ public class Historic {
         return user;
     }
 
+    public String getLastCommand() {
+        if (commands.size() > 0) {
+            return commands.get(commands.size() - 1);
+        } else {
+            return "";
+        }
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
 
-    public Map<String, String> getCommands() {
+    public List<String> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, String> commands) {
+    public void setCommands(List<String> commands) {
         this.commands = commands;
     }
+
 }

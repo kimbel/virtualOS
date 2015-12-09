@@ -1,25 +1,19 @@
 package fr.eseo.os.view;
 
-import fr.eseo.os.Folder;
-import fr.eseo.os.Historic;
-import fr.eseo.os.Terminal;
-import fr.eseo.os.User;
+import fr.eseo.os.*;
 import fr.eseo.os.view.LogFrame;
 
 import java.time.Clock;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * TerminalOS is a specialization of the Terminal class.
  * Allows changing the way the textual command are handled
  */
-public class TerminalOS extends Terminal {
-	//private Set<User> users;
+public class TerminalOS extends Terminal implements Observer {
 	private User user;
 	private Folder currentFolder;
-	
+
 	/**
 	 * Builds a new Terminal frame
 	 * @param login the login of the user
@@ -27,21 +21,33 @@ public class TerminalOS extends Terminal {
 	 */
 	public TerminalOS(String login, String password){
 		super(false);
+
 		this.user = User.getInstance(login, password);
+		this.user.addObserver(this);
+
 		this.setTitle(user.hashCode()+"@"+user.getLogin());
 		this.setUserPrompt(user.getLogin());
-		this.updatePrompt(this.user.getHistoric());
+
+		this.copyCommands();
+
 		this.getCommandTA().append(user.getLogin()+PROMPT);
 
 	}
 
-	private void updatePrompt(Historic historic) {
-		for (Map.Entry<String, String> entry : historic.getCommands().entrySet()) {
-			this.getCommandTA().append(user.getLogin() + PROMPT + entry.getKey() + '\n');
-			this.getCommandTA().append(entry.getValue() + '\n');
+	@Override
+	public void update(Observable o, Object arg) {
+		this.getCommandTA().append(this.user.getLastHistoric() + '\n');
+		this.getCommandTA().append("commande introuvable" + '\n');
+		this.getCommandTA().append(user.getLogin() + PROMPT);
+	}
+
+	public void copyCommands() {
+		for (String command : this.user.getHistoric().getCommands()) {
+			this.getCommandTA().append(user.getLogin() + PROMPT + command + '\n');
+			this.getCommandTA().append("commande introuvable" + '\n');
 		}
 	}
-	
+
 	@Override
 	public boolean isUserLoggedIn(){
 		return userLoggedIn;
@@ -49,8 +55,10 @@ public class TerminalOS extends Terminal {
 
 	@Override
 	public String handleCommand(String command){
-		user.getHistoric().getCommands().put(command, "commande introuvable");
-		return user.getHistoric().getCommands().get(command);
+		this.user.deleteObserver(this); //To prevent update this PROMPT
+		this.user.addCommand(command);
+		this.user.addObserver(this);
+		return "commande introuvable";
 	}
 
 	public static void main(String[] args) {
