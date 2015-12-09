@@ -1,2 +1,5 @@
 
-/TerminalTP/bin/
+bin/
+.classpath
+.idea/
+.settings
