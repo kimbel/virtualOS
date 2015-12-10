@@ -26,15 +26,11 @@ public class User extends Observable {
     }
 
     public synchronized  static User getInstance(String login, String password) {
-
-        for (Map.Entry<String, User> entries : instances.entrySet()) {
-            if (entries.getKey().equals(login)) {
-                return entries.getValue();
-            }
+        User user = instances.get(login);
+        if (user == null) {
+            user = new User(login, password);
+            instances.put(login, user);
         }
-
-        User user = new User(login, password);
-        instances.put(login, user);
         return user;
     }
 
