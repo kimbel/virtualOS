@@ -1,43 +1,47 @@
 package fr.eseo.os;
 
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Map;
+import fr.eseo.os.command.CommandEnum;
+import fr.eseo.os.proxy.AccessEnum;
+import fr.eseo.os.visitor.VisitorCAT;
+import fr.eseo.os.visitor.VisitorLS;
+import fr.eseo.os.visitor.VisitorNode;
+import java.util.*;
+
+import static fr.eseo.os.proxy.AccessEnum.READ_ONLY;
+import static fr.eseo.os.proxy.AccessEnum.READ_WRITE;
 
 public class User extends Observable {
 
     private String login;
     private String password;
     private Folder homeDir;
-    private Historic historic;
+    private String access;
+
     private static Map<String, User> instances = new HashMap<>();
+    private Deque<String> histories;
+
 
     /**
      * Creates a new User with a default home directory
      * @param login of the user
      * @param password of the user
      */
-    private User(String login, String password){
+    private User(String login, String password, String access){
         this.login = login;
         this.password = password;
         this.homeDir = new Folder(this.login);
-        this.historic = new Historic(this);
+        this.access = access;
+        this.histories = new ArrayDeque<>();
         this.initHomeDir();
     }
 
-    public synchronized  static User getInstance(String login, String password) {
+    public synchronized  static User getInstance(String login, String password, String access) {
         User user = instances.get(login);
         if (user == null) {
-            user = new User(login, password);
+            user = new User(login, password, access);
             instances.put(login, user);
         }
         return user;
-    }
-
-    public void addCommand(String command) {
-        this.getHistoric().getCommands().add(command);
-        this.setChanged();
-        this.notifyObservers();
     }
 
     /**
@@ -71,11 +75,74 @@ public class User extends Observable {
         homeDir.addChild(link);
     }
 
-    public Historic getHistoric() {
-        return historic;
+    /**
+     * Stores data in the history of the user
+     * @param command to store
+     */
+    public void addHistory(String command, Object caller){
+        this.histories.add(command);
+        this.setChanged();
+        this.notifyObservers(caller);
     }
 
-    public void setHistoric(Historic historic) {
-        this.historic = historic;
+    /**
+     * @return the history of the user
+     */
+    public Deque<String> getHistories() {
+        return histories;
     }
+
+    public Boolean hasReadOnlyAccess() {
+        return this.access.equals(READ_ONLY.getAccess());
+    }
+
+    public Boolean hasReadWriteAccess() {
+        return this.access.equals(READ_WRITE.getAccess());
+    }
+
+    /* ---------- USER'S COMMANDS ---------- */
+
+    private String executeCommand(VisitorNode vn, String... args) {
+        if (args.length > 1) {
+            Node node = this.getHomeDir().findNode(args[1]);
+            if (node != null) {
+                return node.accept(vn);
+            } else {
+                return args[1] + "not found.";
+            }
+        } else {
+            return this.getHomeDir().accept(vn);
+        }
+    }
+
+    public String executeCommandCAT(String... args) {
+        VisitorNode vcat = new VisitorCAT();
+        return this.executeCommand(vcat, args);
+    }
+
+    public String executeCommandLS(String... args) {
+        VisitorNode vls = new VisitorLS();
+        return this.executeCommand(vls, args);
+    }
+
+    public String executeCommandRM(String... args) {
+        //TODO
+        return null;
+    }
+
+    public String executeCommandMKDIR(String... args) {
+        //TODO
+        return null;
+    }
+
+    public String executeCommandTOUCH(String... args) {
+        //TODO
+        return null;
+    }
+
+    public String executeCommandLN(String... args) {
+        //TODO
+        return null;
+    }
+
 }

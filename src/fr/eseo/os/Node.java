@@ -1,5 +1,7 @@
 package fr.eseo.os;
 
+import fr.eseo.os.visitor.VisitorNode;
+
 public abstract class Node {
 
 	protected String name;
@@ -20,4 +22,6 @@ public abstract class Node {
 	public String toString(){
 		return this.name;
 	}
+
+	public abstract String accept(VisitorNode vn);
 }

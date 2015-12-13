@@ -1,6 +1,9 @@
 package fr.eseo.os;
 
+import fr.eseo.os.visitor.VisitorNode;
+
 public class File extends Node {
+
 	private int size;
 	private String data;
 	
@@ -9,7 +12,7 @@ public class File extends Node {
 	 * @param name the name of the new file
 	 * @param data the data of the new file
 	 */
-	public File(String name, String data){
+	public File(String name, String data) {
 		this.name = name;
 		this.data = data;
 		this.size = data.length()*8;
@@ -19,7 +22,12 @@ public class File extends Node {
 		return this.size;
 	}
 
-	public String getData(){
+	public String getData() {
 		return this.data;
+	}
+
+	@Override
+	public String accept(VisitorNode vn) {
+		return vn.visit(this);
 	}
 }
