@@ -22,4 +22,15 @@ public enum CommandEnum {
     public String getCommand() {
         return command;
     }
+
+    public static CommandEnum getEnum(String command) {
+        if (command != null) {
+            for (CommandEnum value : values()) {
+                if (value.getCommand().equals(command)) {
+                    return value;
+                }
+            }
+        }
+        return  NOT_FOUND;
+    }
 }

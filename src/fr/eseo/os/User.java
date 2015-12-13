@@ -1,10 +1,8 @@
 package fr.eseo.os;
 
 import fr.eseo.os.command.CommandEnum;
-import fr.eseo.os.proxy.AccessEnum;
-import fr.eseo.os.visitor.VisitorCAT;
-import fr.eseo.os.visitor.VisitorLS;
-import fr.eseo.os.visitor.VisitorNode;
+import fr.eseo.os.visitor.*;
+
 import java.util.*;
 
 import static fr.eseo.os.proxy.AccessEnum.READ_ONLY;
@@ -102,47 +100,100 @@ public class User extends Observable {
 
     /* ---------- USER'S COMMANDS ---------- */
 
-    private String executeCommand(VisitorNode vn, String... args) {
+    private String executeCommands(VisitorNode vn, String... args) {
+        String result = "";
         if (args.length > 1) {
             Node node = this.getHomeDir().findNode(args[1]);
-            if (node != null) {
-                return node.accept(vn);
-            } else {
-                return args[1] + "not found.";
+            CommandEnum commandEnum = CommandEnum.getEnum(args[0]);
+            switch (commandEnum) {
+                case LS:
+                    if (node == null) {
+                        result =  args[1] + " not found.";
+                    } else {
+                        result = node.accept(vn);
+                    }
+                    break;
+                case CAT:
+                    if (node == null) {
+                        result =  args[1] + " not found.";
+                    } else {
+                        result = node.accept(vn);
+                    }
+                    break;
+                case TOUCH:
+                    if (node == null) {
+                        node = new File(args[1], "");
+                        homeDir.addChild(node);
+                        result = node.accept(vn);
+                    } else {
+                        result = args[1] + " already exist.";
+                    }
+                    break;
+                case MKDIR:
+                    if (node == null) {
+                        node = new Folder(args[1]);
+                        homeDir.addChild(node);
+                        result = node.accept(vn);
+                    } else {
+                        result = args[1] + " already exist.";
+                    }
+                    break;
+                case RM:
+                    if (node == null) {
+                        result = args[1] + " does not exist.";
+                    } else {
+                        homeDir.getChildren().remove(node);
+                        result = node.accept(vn);
+                    }
+                    break;
+                case LN:
+                    if (node == null) {
+                        result = args[1] + " does not exist.";
+                    } else if (args.length > 2){
+                        Node link = new Link(args[2], node);
+                        homeDir.addChild(link);
+                        result = link.accept(vn);
+                    } else {
+                        result = args[0] + args[1] + " missing operand.";
+                    }
+                    break;
             }
+        } else if (args[0].equals(CommandEnum.LS.getCommand())) {
+            result = this.getHomeDir().accept(vn);
         } else {
-            return this.getHomeDir().accept(vn);
+            result = args[0] + " missing operand.";
         }
+        return result;
     }
 
     public String executeCommandCAT(String... args) {
-        VisitorNode vcat = new VisitorCAT();
-        return this.executeCommand(vcat, args);
+        VisitorNode vn = new VisitorCAT();
+        return this.executeCommands(vn, args);
     }
 
     public String executeCommandLS(String... args) {
-        VisitorNode vls = new VisitorLS();
-        return this.executeCommand(vls, args);
+        VisitorNode vn = new VisitorLS();
+        return this.executeCommands(vn, args);
     }
 
     public String executeCommandRM(String... args) {
-        //TODO
-        return null;
+        VisitorNode vn = new VisitorRM();
+        return executeCommands(vn, args);
     }
 
     public String executeCommandMKDIR(String... args) {
-        //TODO
-        return null;
+        VisitorNode vn = new VisitorMKDIR();
+        return executeCommands(vn, args);
     }
 
     public String executeCommandTOUCH(String... args) {
-        //TODO
-        return null;
+        VisitorNode vn = new VisitorTOUCH();
+        return executeCommands(vn, args);
     }
 
     public String executeCommandLN(String... args) {
-        //TODO
-        return null;
+        VisitorNode vn = new VisitorLN();
+        return executeCommands(vn, args);
     }
 
 }

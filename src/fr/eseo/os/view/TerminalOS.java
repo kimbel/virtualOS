@@ -2,8 +2,8 @@ package fr.eseo.os.view;
 
 import fr.eseo.os.*;
 import fr.eseo.os.command.Command;
-import fr.eseo.os.proxy.ProxyCommandCAT;
-import fr.eseo.os.proxy.ProxyCommandLS;
+import fr.eseo.os.command.CommandEnum;
+import fr.eseo.os.proxy.*;
 
 import java.util.*;
 
@@ -20,6 +20,10 @@ public class TerminalOS extends Terminal implements Observer {
 
 	private Command commandCAT;
 	private Command commandLS;
+	private Command commandTOUCH;
+	private Command commandRM;
+	private Command commandMKDIR;
+	private Command commandLN;
 
 	/**
 	 * Builds a new Terminal frame
@@ -33,11 +37,19 @@ public class TerminalOS extends Terminal implements Observer {
 
 		this.commandLS = new ProxyCommandLS(this.user);
 		this.commandCAT = new ProxyCommandCAT(this.user);
+		this.commandTOUCH = new ProxyCommandTOUCH(this.user);
+		this.commandRM = new ProxyCommandRM(this.user);
+		this.commandMKDIR = new ProxyCommandMKDIR(this.user);
+		this.commandLN = new ProxyCommandLN(this.user);
 
 		this.explorer = new ExplorerOS(this, this.user);
 
 		((ExplorerOS)this.explorer).setCommandLS(this.commandLS);
 		((ExplorerOS)this.explorer).setCommandCAT(this.commandCAT);
+		((ExplorerOS)this.explorer).setCommandTOUCH(this.commandTOUCH);
+		((ExplorerOS)this.explorer).setCommandRM(this.commandRM);
+		((ExplorerOS)this.explorer).setCommandMKDIR(this.commandMKDIR);
+		((ExplorerOS)this.explorer).setCommandLN(this.commandLN);
 
 		this.setTitle(user.hashCode() + "@" + user.getLogin());
 		this.setUserPrompt(user.getLogin());
@@ -71,17 +83,8 @@ public class TerminalOS extends Terminal implements Observer {
 
 	@Override
 	public String handleCommand(String command){
-		String result = NOT_FOUND.getCommand();
 		String[] args = command.split(" ");
-		if (args.length > 0) {
-			if (args[0].equals(LS.getCommand())) {
-				result = this.commandLS.execute(args);
-			}
-
-			if (args[0].equals(CAT.getCommand())) {
-				result = this.commandCAT.execute(args);
-			}
-		}
+		String result = ((ExplorerOS)this.explorer).runCommand(args);
 		// Store the command and the result in the history of the user
 		this.user.addHistory(command + '\n' + result + '\n' + user.getLogin() + PROMPT, this);
 		return result;

@@ -17,11 +17,7 @@ public class ProxyCommandLS implements Command {
 
     @Override
     public String execute(String... args) {
-        if (this.user.hasReadOnlyAccess()) {
-            return AccessEnum.FORBIDDEN.getAccess();
-        } else {
-            Command commandLS = new CommandLS(this.user);
-            return commandLS.execute(args);
-        }
+        Command commandLS = new CommandLS(this.user);
+        return commandLS.execute(args);
     }
 }

@@ -17,11 +17,7 @@ public class ProxyCommandCAT implements Command {
 
     @Override
     public String execute(String... args) {
-        if (this.user.hasReadOnlyAccess()) {
-            return AccessEnum.FORBIDDEN.getAccess();
-        } else {
-            Command commandCAT = new CommandCAT(this.user);
-            return commandCAT.execute(args);
-        }
+        Command commandCAT = new CommandCAT(this.user);
+        return commandCAT.execute(args);
     }
 }
