@@ -2,7 +2,6 @@ package fr.eseo.os.view;
 
 import fr.eseo.os.*;
 import fr.eseo.os.command.Command;
-import fr.eseo.os.command.CommandEnum;
 import fr.eseo.os.proxy.*;
 
 import java.util.*;

@@ -1,15 +1,65 @@
-
+%!TEX root = synthese.tex
 \newpage
 \section{Design Pattern - Command - suite}
 
 \subsection{Objectifs}
 
-Les objectifs de l'incrément 5 sont les suivants :\\
+Dans cet incrément il s’agit de créer une série de commande en plus des commandes cat et ls déjà existantes.  Nous devons donc créer les commandes :\\
 \begin{itemize}
-\item Ajouter la commande : RM;
-\item Ajouter la commande : MKDIR;
-\item Ajouter la commande : TOUCH;
-\item Ajouter la commande : LN.\\
+\item RM : Supprimer un dossier, un fichier ou un lien;
+\item MKDIR : Créer un dossier;
+\item TOUCH : Créer un fichier;
+\item LN : Créer un lien.\\
 \end{itemize}
 
+Pour cet incrément, nous réutiliserons le pattern Commande et Visiteur.
+
 \subsection{Implémentation}
+
+Le diagramme UML de cet incrément est identique à celui de l'incrément 4.\\
+
+Nous avons créé les classes \emph{Command} et \emph{Visitor} associées.
+
+\begin{lstlisting}
+public class CommandTOUCH implements Command {...}
+public class VisitorTOUCH implements VisitorNode {...}
+\end{lstlisting}
+
+Pour éviter de surcharger cette synthèse de code, je vous laisse voir les implémentations de ces commandes sur notre lien Github : \url{https://github.com/percenuage/virtualOS.git}
+
+Nous avons utilisé une énumération afin de lister les commandes : \emph{CommandEnum}.
+
+\begin{lstlisting}
+public enum CommandEnum {
+
+    LS ("ls"), CAT ("cat"), MKDIR ("mkdir"), 
+    RM ("rm"), TOUCH ("touch"), LN ("ln"),
+    NOT_FOUND ("commande introuvable");
+
+    private String command;
+
+    private CommandEnum(String command) {
+        this.command = command;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public static CommandEnum getEnum(String command) {
+        if (command != null) {
+            for (CommandEnum value : values()) {
+                if (value.getCommand().equals(command)) {
+                    return value;
+                }
+            }
+        }
+        return  NOT_FOUND;
+    }
+}
+\end{lstlisting}
+
+On a également utilisé un switch sur l'enumération dans la méthode \emph{executeCommands()} dans la classe \emph{TerminalOS} afin de rediriger les exécutions des commandes. Le \emph{executeCommands} de la classe \emph{User} a également été modifiée (cf. github).\\
+
+Nous n'avons pas oublié de déclarer et d'intancier ces nouvelles commandes dans \emph{TerminalOS} et \emph{ExplorerOS}.
+

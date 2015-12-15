@@ -1,4 +1,4 @@
-
+%!TEX root = synthese.tex
 \newpage
 \section{Design Pattern - Observer}
 
@@ -11,21 +11,79 @@ Les objectifs de l'incrément 2 sont les suivants :\\
 \item Mettre à jour tous les terminaux lors de l'entrée d'une commande.\\
 \end{itemize}
 
-L'API Java nous fournit déjà l'interface Observer et la classe Observable.
+Afin de répondre à ces attentes, nous utiliserons le pattern Observateur. Nous avons décidé d’utiliser l’interface \emph{Observer} et la classe \emph{Observable} de Java. Ce pattern s’applique bien à cette situation car il permet la mise à jour de tous les objets « Observateurs » en fonction des objets «Observés ». Ici, la classe \emph{TerminalOS} sera l’observateur (Observer) et la classe \emph{User} sera observé (Observable).
 
 \subsection{Implémentation}
 
-Pour commencer, nous avons actualisé les notions d'observer et d'observables.
-Les instances "observers" sont les instances de la classe VirtualOS. Nous avons implémenté l'interface java.util.Observer dans la classe VirtualOS.\\
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{../uml/uml-observer}
+\end{figure}
 
-Les instances "observables" sont les instances de la classe User. Nous avons étendu la classe java.util.Observable dans la classe User. Cette classe est liée à un historique (classe Historic). La classe Historic a une liste de commandes et est liée à un utilisateur (classe User).\\
+Pour commencer, nous avons implémenté l'interface \emph{java.util.Observer} dans la classe VirtualOS. 
 
-Afin de gérer la synchronisation des historiques lors de l'ouverture d'un nouveau terminal, nous avons créé une méthode : copyCommand(). Cette méthode parcours la liste des commandes du terminal courant et reproduit les entrées et sorties de l'utilisateur dans le nouveau terminal. Cette méthode est appelé dans le constructeur de TerminalOS.\\
+\begin{lstlisting}
+public class TerminalOS extends Terminal 
+						implements Observer {...}
+\end{lstlisting}
 
-Afin de gérer la synchronisation dynamique des terminaux, nous avons utilisé l'interface Observer et la classe Observable.\\
+Ensuite, nous avons étendu la classe \emph{java.util.Observable} dans la classe \emph{User}. Cette classe a un historique (attribut \emph{histories}) collection de type \emph{Deque<String>}. Selon les spécifications d'Oracle, la collection \emph{Deque} est préférable dans notre cas (parcours de tous les éléments, ajout en queue d'un historique et récupération du dernier historique : LIFO\footnote{\emph{Last In First Out}}) plutôt que les collections \emph{List}, \emph{LinkedList} ou \emph{Stack}.
 
-L'interface Observer n'a qu'une seule méthode : void update(Observable o). Dans virtualOS, on a "override" cette méthode en ajoutant les chaînes de caractères que nous voulons mettre à jour. On récupère seulement la dernière commande de l'historique : getLastHistoric().\\
+\begin{lstlisting}
+public class User extends Observable {
+    private Deque<String> histories;
+    ...
+}
+\end{lstlisting}
 
-L'appel de la méthode handleCommand, on effectue la mise à jour des terminaux par l'appel de addCommand. Afin d'éviter une mise à jour du terminal courant, on supprime ce terminal dans la liste des observers (deleteObserver). On le réajoute après la synchronisation (addObserver).\\
+Afin de gérer la synchronisation des historiques lors de l'ouverture d'un nouveau terminal, nous avons créé une méthode : \emph{fillHistory()}. Cette méthode parcours la liste des commandes du terminal courant et reproduit les entrées et sorties de l'utilisateur dans le nouveau terminal. Cette méthode est appelée dans le constructeur de \emph{TerminalOS}.
 
-La classe User a une méthode permettant l'ajout d'une commande dans la liste et la synchronisation des terminaux : addCommand(String command). Cette méthode utilise les méthodes de la classe Observable pour la synchronisation : setChanged() (permet la modifiction des terminaux via un booléen contenu dans la classe Observable : changed) et notifyObservers() (appelle la méthode update de l'interface Observer afin de mettre à jour les terminaux).
+\begin{lstlisting}
+private void fillHistory() {
+	for(String historic : this.user.getHistories()){
+		getCommandTA().append(historic);
+	}
+}
+\end{lstlisting}
+
+Ensuite, à chaque fois que l'utilisateur entre une commande (appelle la méthode \emph{handleCommand()}), on ajoute en queue la commande et son résultat. Cette fonctionnalité est implémentée dans la méthode \emph{addHistory()}.\\
+
+Afin de gérer la synchronisation des terminaux, on utilise les méthodes de la classe \emph{Observable}. La méthode \emph{setChanged()} donne la possibilité de modifier les terminaux. La commande \emph{notifyObservers()}, fait appeler la méthode \emph{update()} de la classe \emph{TerminalOS} et donc modifie l'historie.
+
+\begin{lstlisting}
+public void addHistory(String command, Object caller){
+    this.histories.add(command);
+    this.setChanged();
+    this.notifyObservers(caller);
+}
+
+@Override
+public String handleCommand(String command){
+	...
+	user.addHistory(command + '\n' + result + '\n' + 
+						user.getLogin() + PROMPT, this);
+	return result;
+}
+\end{lstlisting}
+
+Ensuite, on a \emph{override} la méthode \emph{update()} de \emph{TerminalOS} en ajoutant la commande et le résultat que nous voulions mettre à jour. On récupère seulement la dernière commande de l'historique.
+
+\begin{lstlisting}
+@Override
+public void update(Observable o, Object caller) {
+	if (caller != this) {
+		tgetCommandTA().append(user.getHistories()
+										.getLast());
+	}
+}
+\end{lstlisting}
+
+Enfin pour chaque nouveau terminal, il faut l'ajouter dans la liste des observer et remplir l'historique. On a modifié le contructeur comme suit :
+
+\begin{lstlisting}
+public TerminalOS(String login, String password){
+	...
+	this.fillHistory();
+	this.user.addObserver(this);
+}
+\end{lstlisting}

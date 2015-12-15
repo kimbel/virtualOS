@@ -64,23 +64,145 @@
 	\end{frame}
 
 	\begin{frame}{Incrément 1 : Singleton - UML}
-		\begin{center}
-		\begin{tikzpicture}
-		\begin{umlpackage}{os}
-		\umlclass{User}
-		{
-		\umlstatic{-- instances : Map<String, User>}
-		}{
-		-- User (login : String, password : String)\\
-		\umlstatic{+ getInstance (login : String, password : String) : User}
-		}
-		\end{umlpackage}
-		\end{tikzpicture}
-		\end{center}		
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\textwidth]{../uml/uml-singleton}
+		\end{figure}		
 	\end{frame}
 
-% ------------------------------------------------------------------------ %
 
+\section{Incrément 2 : Observer}
+	
+	\begin{frame}{Incrément 2 : Observer}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item Synchroniser les historiques des terminaux;
+		\item Mettre à jour tous les terminaux lors de l'entrée d'une commande.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Observer}
+		\begin{itemize}
+		\item Permet de mettre à jour les objets observés en fonction de l'objet observateur.
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 2 : Observer - UML}
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\textwidth]{../uml/uml-observer}
+		\end{figure}		
+	\end{frame}
+
+
+
+\section{Incrément 3 : Visiteur}
+	
+	\begin{frame}{Incrément 3 : Visiteur}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item Interpréter des commandes du terminal (ls et cat) pour chaque type de noeud;
+		\item Utiliser le patron Visitor.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Visiteur}
+		\begin{itemize}
+		\item Sépare l'algorithme de la structure de données;
+		\item Chaque élément implémente une méthode d'acceptation de visiteur;
+		\item Chaque visiteur implémente une méthode \emph{visit()} pour chaque élément (file, folder et link).
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 3 : Visiteur - UML}
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\textwidth]{../uml/uml-visitor}
+		\end{figure}		
+	\end{frame}
+
+
+\section{Incrément 4 : Commande}
+	
+	\begin{frame}{Incrément 4 : Commande}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item Réutiliser les traitements interprétés par le terminal;
+		\item Exprimer de manière unique le traitement des commandes ls et cat.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Commande}
+		\begin{itemize}
+		\item Isole une requête;
+		\item Ces requêtes peuvent provenir de plusieurs émetteurs (\emph{TerminalOS} et \emph{ExplorerOS});
+		\item Ces émetteurs doivent produire la même requête;
+		\item Ces requêtes doivent pouvoir être annulées.
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 4 : Commande - UML}
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.78\textwidth]{../uml/uml-command}
+		\end{figure}		
+	\end{frame}
+
+\section{Incrément 5 : Commande ++}
+	
+	\begin{frame}{Incrément 5 : Commande ++}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item RM : Supprimer un dossier, un fichier ou un lien;
+		\item MKDIR : Créer un dossier;
+		\item TOUCH : Créer un fichier;
+		\item LN : Créer un lien.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Commande}
+		\begin{itemize}
+		\item Isole une requête;
+		\item Ces requêtes peuvent provenir de plusieurs émetteurs (\emph{TerminalOS} et \emph{ExplorerOS}) ayant le même focntionnement;
+		\item Ces requêtes doivent pouvoir être annulées.
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 5 : Commande - UML}
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.78\textwidth]{../uml/uml-command}
+		\end{figure}		
+	\end{frame}
+
+\section{Incrément 6 : Proxy}
+	
+	\begin{frame}{Incrément 6 : Proxy}
+		\begin{block}{Objectifs}
+		\begin{itemize}
+		\item Lecture seule : Pas de modification des données des utilisateurs ls et cat sont autorisées;
+		\item Lecture/écriture : Les commandes mkdir, touch, ln et rm sont autorisées.
+		\end{itemize}
+		\end{block}
+		
+		\begin{exampleblock}{Patron Proxy}
+		\begin{itemize}
+		\item Rôle d'aiguilleur en fonction des droits de l'utilisateur;
+		\item Couche d'abstraction entre le client et la commande.
+		\end{itemize}
+		\end{exampleblock}					
+	\end{frame}
+
+	\begin{frame}{Incrément 6 : Proxy - UML}
+		\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\textwidth]{../uml/uml-proxy}
+		\end{figure}		
+	\end{frame}
 
 
 \end{document} 
